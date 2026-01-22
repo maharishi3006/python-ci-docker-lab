@@ -64,5 +64,6 @@ jobs:
 
       - name: Run tests
         # Now pytest can find 'app' as it's installed as a package
-        run: pytest -q
+        run: python -m pytest -q
+
 
