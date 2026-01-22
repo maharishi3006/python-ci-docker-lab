@@ -1,4 +1,3 @@
-# .github/workflows/ci-dockerhub.yml
 on:
   push:
     branches: [ "main" ]
@@ -12,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,25 +20,10 @@ jobs:
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: Debug workspace (optional)
-        run: |
-          echo "Workspace: $GITHUB_WORKSPACE"
-          pwd
-          ls -la
-          ls -la tests || true
-          python - <<'PY'
-import sys, pprint, os
-print("PYTHONPATH env:", os.environ.get("PYTHONPATH"))
-pprint.pprint(sys.path)
-PY
+          pip install -r requirements.txt
 
       - name: Run tests
-        env:
-          # Ensure the repository root is on PYTHONPATH so tests can import app.py
-          PYTHONPATH: ${{ github.workspace }}
-        run: python -m pytest -q
+        run: pytest -q
 
       - name: Docker meta
         id: meta
