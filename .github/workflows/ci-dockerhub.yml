@@ -55,3 +55,14 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
+      - name: Install deps and project
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Install the local project in editable mode
+          pip install -e . 
+
+      - name: Run tests
+        # Now pytest can find 'app' as it's installed as a package
+        run: pytest -q
+
